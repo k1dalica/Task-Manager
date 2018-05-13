@@ -1,6 +1,7 @@
 import * as types from './types'
+import { errorHandler } from '@/services/http'
 
-import { getComments, addComment, deleteComment, editComment } from '@/services/api/comments'
+import { getComments, addComment, deleteComment, deleteTaskComments, editComment } from '@/services/api/comments'
 
 const state = {
   comments: []
@@ -16,33 +17,41 @@ const actions = {
       .then(() => {
         return commit(types.EDIT_COMMENT, params)
       })
-      .catch(err => console.log(err))
+      .catch(err => errorHandler(err))
   },
   deleteComment ({ commit }, id) {
     return deleteComment(id)
       .then(() => {
         return commit(types.REMOVE_COMMENT, id)
       })
-      .catch(err => console.log(err))
+      .catch(err => errorHandler(err))
   },
   addComment ({ commit }, params) {
     return addComment(params)
       .then(comment => {
         return commit(types.ADD_COMMENT, comment)
       })
-      .catch(err => console.log(err))
+      .catch(err => errorHandler(err))
   },
-  getComments ({ commit }, id) {
+  deleteTaskComments ({ commit }, id) {
     let params = new URLSearchParams()
     params.append('taskId', id)
+    return deleteTaskComments(params)
+      .then(() => {
+        return commit(types.REMOVE_COMMENT, id)
+      })
+      .catch(err => errorHandler(err))
+  },
+  getComments ({ commit, dispatch }, id) {
+    let params = new URLSearchParams()
+    params.append('taskId', id)
+    params.append('_sort', 'id')
+    params.append('_order', 'desc')
     return getComments(params)
       .then(res => {
         return commit(types.SET_COMMENTS, res)
       })
-      .catch(err => {
-        commit(types.SET_COMMENTS, [])
-        console.log(err)
-      })
+      .catch(err => errorHandler(err))
   }
 }
 
@@ -66,7 +75,7 @@ const mutations = {
     state.comments = list
   },
   [ types.ADD_COMMENT ] (state, comment) {
-    state.comments.push(comment)
+    state.comments.unshift(comment)
   }
 }
 

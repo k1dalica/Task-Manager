@@ -1,4 +1,6 @@
 import * as types from './types'
+import Vue from 'vue'
+import { errorHandler } from '@/services/http'
 
 import { getTasks, getTask, createTask, editTask, deleteTask } from '@/services/api/tasks'
 
@@ -18,62 +20,40 @@ const actions = {
       .then(res => {
         commit(types.SET_TASK, res)
       })
-      .catch(err => console.log(err))
+      .catch(err => errorHandler(err))
   },
   createTask ({ commit }, params) {
     return createTask(params)
       .then(res => res)
-      .catch(err => console.log(err))
+      .catch(err => errorHandler(err))
   },
   deleteTask ({ commit }, id) {
     return deleteTask(id)
       .then(res => res)
-      .catch(err => console.log(err))
-  },
-  getAllTasks ({ commit, dispatch }, username) {
-    const a = dispatch('getTasks', { username, param: 'author' })
-    const b = dispatch('getTasks', { username, param: 'assignee' })
-
-    return Promise.all([a, b]).then(values => {
-      let created = values[0]
-      let assigned = values[1]
-      dispatch('removeDuplicateTasks', { created, assigned })
-        .then(res => {
-          commit(types.SET_TASKS, res)
-        })
-    })
-  },
-  removeDuplicateTasks ({ commit }, { created, assigned }) {
-    let list = created
-    assigned.forEach(task => {
-      let alreadyInsered = false
-      created.forEach(t => {
-        if (t.id === task.id) {
-          alreadyInsered = true
-        }
-      })
-      if (!alreadyInsered) {
-        list.push(task)
-      }
-    })
-    return list
   },
   getTasks ({ commit }, { username, param }) {
     let params = new URLSearchParams()
     params.append(param, username)
+    params.append('_sort', 'id')
+    params.append('_order', 'desc')
     return getTasks(params)
       .then(res => {
         commit(types.SET_TASKS, res)
         return res
       })
-      .catch(err => console.log(err))
+      .catch(err => errorHandler(err))
   },
   getTask ({ commit }, id) {
     return getTask(id)
       .then(res => {
-        commit(types.SET_TASK, res)
+        if (res) {
+          commit(types.SET_TASK, res)
+          return res
+        } else {
+          Vue.router.push({ name: 'Tasks' })
+        }
       })
-      .catch(err => err)
+      .catch(err => errorHandler(err))
   }
 }
 

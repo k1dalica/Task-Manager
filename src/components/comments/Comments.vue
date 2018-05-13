@@ -7,9 +7,8 @@
     <div class="comments" v-if="comments.length > 0">
       <Comment v-for="comment in comments" :key="comment.id" :comment="comment" />
     </div>
-    <div class="nothing-found" v-else>
-      <h3><i class="fas fa-exclamation-triangle"></i> There are no comments, be first to post ! :)</h3>
-    </div>
+
+    <NoResult v-else text="There are no comments, be first to post ! :)" />
   </div>
 </template>
 
@@ -17,11 +16,12 @@
 import { mapActions, mapGetters } from 'vuex'
 import NewComment from './NewComment'
 import Comment from './Comment'
+import NoResult from '@/components/common/NoResult'
 
 export default {
   name: 'Comments',
   props: [ 'task' ],
-  components: { NewComment, Comment },
+  components: { NewComment, Comment, NoResult },
   created () {
     this.getComments(this.task.id)
   },

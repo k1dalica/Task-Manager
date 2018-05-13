@@ -1,7 +1,7 @@
 <template>
   <div class="form-group">
     <label :class="{ 'up': upperLabel }" @click="$refs.input.focus()">{{ label }}</label>
-    <input ref="input" :type="type" v-model="text" @focus="inputFocused = true" @blur="inputFocused = false" v-on:keyup.enter="$emit('on-enter')">
+    <input autocomplete="off" ref="input" :type="type" v-model="text" @focus="inputFocused = true" @blur="inputFocused = false" v-on:keyup.enter="$emit('on-enter')">
   </div>
 </template>
 
@@ -10,9 +10,12 @@ export default {
   name: 'FormInput',
   props: ['type', 'label', 'value'],
   data: () => ({
-    text: this.value,
+    text: '',
     inputFocused: false
   }),
+  created () {
+    this.text = this.value
+  },
   computed: {
     upperLabel () {
       return (this.inputFocused || this.value.length > 0)
@@ -21,11 +24,6 @@ export default {
   watch: {
     text (val) {
       this.$emit('input', val)
-    }
-  },
-  methods: {
-    valueUpdate () {
-      // this.$emit('on-value-change', this.text)
     }
   }
 }

@@ -1,34 +1,6 @@
 {
   "tasks": [
     {
-      "id": 1,
-      "title": "Lorem ipsum.",
-      "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolor ab ad alias porro reprehenderit ullam impedit nihil velit temporibus laudantium sapiente non autem consequuntur assumenda, voluptatum beatae aperiam ipsa itaque?",
-      "assignee": "renhead",
-      "author": "renhead"
-    },
-    {
-      "id": 2,
-      "title": "Create Single Task View",
-      "description": "Create Single Task View",
-      "assignee": "renhead",
-      "author": "renhead"
-    },
-    {
-      "id": 3,
-      "title": "Comments section",
-      "description": "Comments section",
-      "assignee": "antonije",
-      "author": "antonije"
-    },
-    {
-      "title": "No results",
-      "description": "No results",
-      "author": "antonije",
-      "assignee": "antonije",
-      "id": 4
-    },
-    {
       "id": 5,
       "title": "Mobile optimization",
       "description": "Mobile optimization",
@@ -36,60 +8,18 @@
       "author": "antonije"
     },
     {
-      "title": "Single task wrong id",
-      "description": "When we open task with id that doesn't exist",
-      "author": "antonije",
-      "assignee": "antonije",
-      "id": 6
-    },
-    {
-      "title": "Delete comments when you delete task",
-      "description": "Delete comments when you delete task",
-      "author": "antonije",
-      "assignee": "antonije",
-      "id": 7
-    },
-    {
-      "title": "Error Transformer",
-      "description": "Error catcher",
-      "author": "antonije",
-      "assignee": "antonije",
-      "id": 8
-    },
-    {
-      "title": "Update and delete only if you created a task",
-      "description": "Update and delete only if you created a task",
-      "author": "antonije",
-      "assignee": "antonije",
-      "id": 9
-    },
-    {
-      "title": "Instead of all tasks, it should be Created tasks",
-      "description": "Show only tasks that are created by me",
-      "author": "antonije",
-      "assignee": "antonije",
-      "id": 10
-    },
-    {
-      "title": "Comments Delete and edit permissions",
-      "description": "Comments Delete and edit permissions",
-      "author": "antonije",
-      "assignee": "antonije",
-      "id": 11
-    },
-    {
+      "id": 12,
       "title": "Maybe add a user profile",
       "description": "Maybe add a user profile",
-      "author": "antonije",
-      "assignee": "antonije",
-      "id": 12
+      "assignee": "renhead",
+      "author": "antonije"
     }
   ],
   "comments": [
     {
-      "body": "done.",
+      "body": "123",
       "author": "antonije",
-      "taskId": 3,
+      "taskId": 5,
       "id": 1
     }
   ],

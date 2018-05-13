@@ -7,7 +7,7 @@
       <span><i class="fas fa-user"></i> <b>{{ task.author }}</b> created this task and assigned it to <i class="fas fa-user"></i> <b>{{ task.assignee }}</b></span>
       <p>{{ task.description }}</p>
 
-      <div class="buttons">
+      <div class="buttons" v-if="permissions">
         <router-link :to="{ name: 'EditTask', params: { id: task.id }}"><button><i class="fas fa-pencil-alt"></i> Edit task</button></router-link>
         <button class="red" @click="toggleDeleteModal(true)"><i class="fas fa-trash-alt"></i> Delete task</button>
       </div>
@@ -29,19 +29,21 @@ export default {
   data: () => ({
     id: null,
     loaded: false,
-    openDeleteTaskModal: false
+    openDeleteTaskModal: false,
+    permissions: false
   }),
   created () {
     this.id = this.$route.params.id
 
     this.getTask(this.id)
-      .then(() => {
+      .then(res => {
+        // Permissions for task
+        this.permissions = (res.author === this.user.username)
+        if (!this.permissions && res.assignee !== this.user.username) {
+          this.$router.push({ name: 'Tasks' })
+        }
         this.loaded = true
         bus.$emit('loader', false)
-      })
-      .catch(() => {
-        bus.$emit('loader', false)
-        console.log('error')
       })
 
     bus.$on('deletetaskconfirmed', this.confirmDeleteTask)

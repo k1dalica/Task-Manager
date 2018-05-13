@@ -30,7 +30,6 @@ export default {
             message: 'Comment deleted successfully'
           })
         })
-        .catch(() => bus.$emit('loader', false))
     },
     close () {
       this.$emit('hide', false)

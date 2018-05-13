@@ -1,18 +1,13 @@
 <template>
   <div class="container">
-    <h1>Add new task</h1>
-    <div class="form">
-      <div class="form-group">
-        <label>Task name</label>
-        <input type="text" class="input" v-model="title">
-        <span class="error" v-if="titleError !== ''">{{ titleError }}</span>
-      </div>
+    <Heading title="New task" />
 
-      <div class="form-group">
-        <label>Description</label>
-        <textarea rows="5" v-model="description"></textarea>
-        <span class="error" v-if="descError !== ''">{{ descError }}</span>
-      </div>
+    <div class="form">
+      <InputModel type="text" label="Task name" v-model="title" />
+      <span class="error" v-if="titleError !== ''">{{ titleError }}</span>
+
+      <InputModel type="textarea" label="Description" v-model="description" />
+      <span class="error" v-if="descError !== ''">{{ descError }}</span>
 
       <div class="bottom">
         <div class="float-left">
@@ -30,9 +25,12 @@
 import bus from '@/services/bus'
 import { mapActions, mapGetters } from 'vuex'
 import ChooseAssignee from '@/components/common/ChooseAssignee'
+import InputModel from '@/components/common/InputModel'
+import Heading from '@/components/common/Heading'
 
 export default {
   name: 'NewTask',
+  components: { ChooseAssignee, InputModel, Heading },
   data: () => ({
     title: '',
     description: '',
@@ -44,7 +42,6 @@ export default {
   created () {
     this.getUsers()
       .then(() => bus.$emit('loader', false))
-      .catch(() => bus.$emit('loader', false))
   },
   computed: {
     ...mapGetters(['user', 'users'])
@@ -65,7 +62,6 @@ export default {
             this.$router.push({ name: 'Task', params: { id: res.id } })
             bus.$emit('loader', false)
           })
-          .catch(() => bus.$emit('loader', false))
       } else {
         if (this.title === '') {
           this.titleError = 'Field Task name is empty !'
@@ -81,36 +77,12 @@ export default {
     setAssignee (val) {
       this.assignee = val
     }
-  },
-  components: {
-    ChooseAssignee
   }
 }
 </script>
 
 <style lang="scss" scoped>
   .form {
-
-    label {
-      display: block;
-      margin: 20px 0 10px 0;
-    }
-
-    .input, textarea {
-      width: 100%;
-      background-color: #fff;
-      border-radius: 3px;
-      padding: 0 15px;
-    }
-
-    .input {
-      height: 40px;
-    }
-
-    textarea {
-      padding: 15px;
-      resize: none;
-    }
 
     .bottom {
       margin-top: 20px;

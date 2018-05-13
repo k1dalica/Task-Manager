@@ -19,9 +19,9 @@ export default {
   name: 'DeleteTaskModal',
   props: [ 'task' ],
   methods: {
-    ...mapActions(['deleteTask']),
+    ...mapActions(['deleteTask', 'deleteTaskComments']),
     confirmDeleteTask () {
-      // delete comments also
+      // Trebao bih da brisem i komentare ali json server vec sam to radi.
       this.deleteTask(this.task.id)
         .then(() => {
           bus.$emit('loader', false)
@@ -31,7 +31,6 @@ export default {
           })
           this.$router.push({ name: 'Tasks' })
         })
-        .catch(() => bus.$emit('loader', false))
     },
     close () {
       this.$emit('hide', false)

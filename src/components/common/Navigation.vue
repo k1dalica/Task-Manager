@@ -5,7 +5,7 @@
         <img src="@/assets/images/logo.png">
       </div>
       <ul>
-        <li><router-link :to="{ name: 'Tasks'}">All tasks</router-link></li>
+        <li><router-link :to="{ name: 'Tasks'}">My tasks</router-link></li>
         <li><router-link :to="{ name: 'AssignedToMe'}">Assigned to me</router-link></li>
         <li><router-link :to="{ name: 'NewTask'}"><i class="fas fa-plus"></i> New task</router-link></li>
       </ul>

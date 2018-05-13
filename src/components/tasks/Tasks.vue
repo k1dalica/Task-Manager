@@ -1,9 +1,8 @@
 <template>
   <div class="container">
-    <h1>All tasks</h1>
-    <div class="content-box">
-      <TasksTable :tasks="tasks"/>
-    </div>
+    <Heading title="My tasks" />
+
+    <TasksTable :tasks="tasks"/>
   </div>
 </template>
 
@@ -11,9 +10,11 @@
 import bus from '@/services/bus'
 import { mapActions, mapGetters } from 'vuex'
 import TasksTable from './../common/TasksTable'
+import Heading from '@/components/common/Heading'
 
 export default {
   name: 'Tasks',
+  components: { TasksTable, Heading },
   mounted () {
     this.loadTasks()
   },
@@ -26,17 +27,13 @@ export default {
     ...mapGetters(['user', 'tasks'])
   },
   methods: {
-    ...mapActions(['getAllTasks']),
+    ...mapActions(['getTasks']),
     loadTasks () {
       if (this.user && this.user.username !== null) {
-        this.getAllTasks(this.user.username)
+        this.getTasks({ username: this.user.username, param: 'author' })
           .then(() => bus.$emit('loader', false))
-          .catch(() => bus.$emit('loader', false))
       }
     }
-  },
-  components: {
-    TasksTable
   }
 }
 </script>
@@ -53,10 +50,5 @@ export default {
       color: #000;
       margin-bottom: 20px;
     }
-  }
-  .content-box {
-    background-color: #fff;
-    border-radius: 5px;
-    overflow: hidden;
   }
 </style>

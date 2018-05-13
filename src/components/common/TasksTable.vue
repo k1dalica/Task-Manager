@@ -14,16 +14,18 @@
         </tr>
       </tbody>
     </table>
-    <div class="nothing-found" v-else>
-      <h3><i class="fas fa-exclamation-triangle"></i> No tasks were found</h3>
-    </div>
+
+    <NoResult v-else text="No tasks were found" />
   </div>
 </template>
 
 <script>
+import NoResult from '@/components/common/NoResult'
+
 export default {
   name: 'TasksTable',
   props: ['tasks'],
+  components: { NoResult },
   methods: {
     openTask (id) {
       this.$router.push({ name: 'Task', params: { id } })
@@ -33,9 +35,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-table {
+  table {
     width: 100%;
     border-collapse: collapse;
+    background-color: #fff;
+    border-radius: 5px;
+    overflow: hidden;
 
     tr {
       border-bottom: 1px solid rgba(0, 0, 0, .1);
@@ -45,7 +50,7 @@ table {
       }
 
       th {
-        padding: 15px 20px;
+        padding: 20px;
         font-weight: bold;
         text-align: right;
 

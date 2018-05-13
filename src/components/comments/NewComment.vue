@@ -43,7 +43,6 @@ export default {
             })
             bus.$emit('loader', false)
           })
-          .catch(() => bus.$emit('loader', false))
       } else {
         this.error = 'Field comment is empty !'
       }

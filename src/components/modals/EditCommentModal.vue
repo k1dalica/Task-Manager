@@ -45,7 +45,6 @@ export default {
               message: 'Comment successfully edited'
             })
           })
-          .catch(() => bus.$emit('loader', false))
       } else {
         this.error = 'Field comment is empty'
       }

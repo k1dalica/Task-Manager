@@ -1,7 +1,10 @@
 <template>
   <div id="app">
     <Loader v-show="loader" />
-    <Message v-show="notifyMessage" :data="notifyMessage" />
+
+    <transition  name="fade">
+      <Message v-if="notifyMessage" :data="notifyMessage" />
+    </transition>
 
     <router-view />
   </div>
@@ -10,7 +13,7 @@
 <script>
 import bus from './services/bus'
 import Loader from './components/common/Loader'
-import Message from './components/common/Message'
+import Message from './components/modals/Message'
 
 export default {
   name: 'App',
@@ -44,5 +47,11 @@ export default {
   #app {
     width: 100%;
     height: 100%;
+  }
+  .fade-enter-active, .fade-leave-active {
+    transition: opacity ease-in-out .1s;
+  }
+  .fade-enter, .fade-leave-to {
+    opacity: 0;
   }
 </style>

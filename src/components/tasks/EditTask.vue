@@ -1,18 +1,13 @@
 <template>
   <div class="container">
-    <h1>Edit task</h1>
-    <div class="form" v-if="task !== null">
-      <div class="form-group">
-        <label>Task name</label>
-        <input type="text" class="input" v-model="task.title">
-        <span class="error" v-if="titleError !== ''">{{ titleError }}</span>
-      </div>
+    <Heading title="Edit task" />
 
-      <div class="form-group">
-        <label>Description</label>
-        <textarea rows="5" v-model="task.description"></textarea>
-        <span class="error" v-if="descError !== ''">{{ descError }}</span>
-      </div>
+    <div class="form" v-if="task !== null">
+      <InputModel type="text" label="Task name" v-model="task.title" />
+      <span class="error" v-if="titleError !== ''">{{ titleError }}</span>
+
+      <InputModel type="textarea" label="Description" v-model="task.description" />
+      <span class="error" v-if="descError !== ''">{{ descError }}</span>
 
       <div class="bottom">
         <div class="float-left">
@@ -30,9 +25,12 @@
 import bus from '@/services/bus'
 import { mapActions, mapGetters } from 'vuex'
 import ChooseAssignee from '@/components/common/ChooseAssignee'
+import InputModel from '@/components/common/InputModel'
+import Heading from '@/components/common/Heading'
 
 export default {
   name: 'NewTask',
+  components: { ChooseAssignee, InputModel, Heading },
   data: () => ({
     id: null,
     titleError: '',
@@ -40,35 +38,31 @@ export default {
     assigneeError: '',
     assignee: null
   }),
-  created () {
-    this.id = this.$route.params.id
-
-    this.getTask(this.id)
-      .then(() => {
-        this.findAssignee()
-        bus.$emit('loader', false)
-      })
-      .catch(() => bus.$emit('loader', false))
-    this.getUsers()
-      .then(() => {
-        this.findAssignee()
-        bus.$emit('loader', false)
-      })
-      .catch(() => bus.$emit('loader', false))
-  },
   computed: {
     ...mapGetters(['user', 'users', 'task'])
+  },
+  created () {
+    this.id = this.$route.params.id
+    const a = this.getTask(this.id)
+    const b = this.getUsers()
+
+    Promise.all([a, b]).then(values => {
+      const res = values[0]
+      if (res.author !== this.user.username) {
+        this.$router.push({ name: 'Tasks' })
+      }
+      this.findAssignee()
+      bus.$emit('loader', false)
+    })
   },
   methods: {
     ...mapActions(['getUsers', 'getTask', 'editTask']),
     findAssignee () {
-      if (this.users.length > 0 && this.task !== null) {
-        this.users.forEach(u => {
-          if (u.username === this.task.assignee) {
-            this.assignee = u
-          }
-        })
-      }
+      this.users.forEach(u => {
+        if (u.username === this.task.assignee) {
+          this.assignee = u
+        }
+      })
     },
     edit () {
       if (this.task.title !== '' && this.task.description !== '' && this.assignee) {
@@ -88,7 +82,6 @@ export default {
             })
             bus.$emit('loader', false)
           })
-          .catch(() => bus.$emit('loader', false))
       } else {
         if (this.task.title === '') {
           this.titleError = 'Field Task name is empty !'
@@ -104,9 +97,6 @@ export default {
     setAssignee (val) {
       this.assignee = val
     }
-  },
-  components: {
-    ChooseAssignee
   }
 }
 </script>

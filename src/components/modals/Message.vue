@@ -26,6 +26,7 @@ export default {
 
 <style lang="scss" scoped>
   #message-popoup {
+    transition: all 1.5s ease;
     position: fixed;
     width: 100%;
     height: 100%;

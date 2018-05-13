@@ -4,7 +4,7 @@
     <DeleteCommentModal v-if="deleteComment" :comment="comment" @hide="deleteComment = false" />
     <img class="avatar" :src="avatar">
     <div class="text">
-      <div class="buttons">
+      <div class="buttons" v-if="permission">
         <i class="fas fa-pencil-alt" @click="editMode = true"></i>
         <i class="fas fa-trash-alt" @click="deleteComment = true"></i>
       </div>
@@ -27,14 +27,15 @@ export default {
   data: () => ({
     editMode: false,
     deleteComment: false,
-    author: null
+    author: null,
+    permission: null
   }),
   created () {
     this.getUserByName(this.comment.author)
       .then(res => {
         this.author = res
       })
-      .catch(err => console.log(err))
+    this.permission = ((this.user.author === this.user.username) || (this.task.author === this.user.username))
   },
   computed: {
     ...mapGetters(['user', 'task']),

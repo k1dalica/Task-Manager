@@ -1,19 +1,20 @@
 <template>
   <div class="container">
-    <h1>Tasks assigned to me</h1>
-    <div class="content-box">
-      <TasksTable :tasks="tasks"/>
-    </div>
+    <Heading title="Tasks assigned to me" />
+
+    <TasksTable :tasks="tasks"/>
   </div>
 </template>
 
 <script>
 import bus from '@/services/bus'
 import { mapActions, mapGetters } from 'vuex'
-import TasksTable from './../common/TasksTable'
+import TasksTable from '@/components/common/TasksTable'
+import Heading from '@/components/common/Heading'
 
 export default {
   name: 'Tasks',
+  components: { TasksTable, Heading },
   mounted () {
     this.loadTasks()
   },
@@ -31,12 +32,8 @@ export default {
       if (this.user && this.user.username !== null) {
         this.getTasks({ username: this.user.username, param: 'assignee' })
           .then(() => bus.$emit('loader', false))
-          .catch(() => bus.$emit('loader', false))
       }
     }
-  },
-  components: {
-    TasksTable
   }
 }
 </script>
@@ -53,10 +50,5 @@ export default {
       color: #000;
       margin-bottom: 20px;
     }
-  }
-  .content-box {
-    background-color: #fff;
-    border-radius: 5px;
-    overflow: hidden;
   }
 </style>

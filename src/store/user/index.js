@@ -1,5 +1,6 @@
 import * as types from './types'
 import Vue from 'vue'
+import { errorHandler } from '@/services/http'
 
 import { loginUser, getUser, getUsers, getUserByName } from '@/services/api/user'
 
@@ -21,12 +22,14 @@ const actions = {
       .then(user => {
         return user[0]
       })
+      .catch(err => errorHandler(err))
   },
   getUsers ({ commit }) {
     return getUsers()
       .then(users => {
         commit(types.SET_USERS, users)
       })
+      .catch(err => errorHandler(err))
   },
   loginUser ({ commit, dispatch }, payload) {
     return loginUser(payload)
@@ -42,6 +45,7 @@ const actions = {
           }
         })
       })
+      .catch(err => errorHandler(err))
   },
   getUserData ({ commit, dispatch }, id) {
     return getUser(id)
@@ -55,7 +59,7 @@ const actions = {
         }
       })
       .catch(err => {
-        console.log(err)
+        errorHandler(err)
         dispatch('logoutUser')
         return false
       })
